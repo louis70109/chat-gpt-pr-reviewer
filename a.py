@@ -1,41 +1,49 @@
+import datetime
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
 class Book:
     def __init__(self, title, author, year):
         self.title = title
         self.author = author
         self.year = year
+        self.added_date = datetime.datetime.now()
 
     def __str__(self):
         return f"{self.title} by {self.author} ({self.year})"
 
 class Library:
     def __init__(self):
-        self.books = []
+        self.books = {}
 
     def add_book(self, book):
-        self.books.append(book)
-        print("Added book: " + book)  # 錯誤：應該使用 str(book)
+        if isinstance(book, Book):
+            self.books[book.title] = book
+            logging.info(f"Added book: {book}")
+        else:
+            logging.error("Invalid book object")
 
     def remove_book(self, title):
-        for book in self.books:
-            if book.title == title:
-                self.books.remove(book)
-                print("Removed book: " + book)  # 錯誤：應該使用 str(book)
-                return
-        print("Book not found")
+        if title in self.books:
+            removed_book = self.books.pop(title)
+            logging.info(f"Removed book: {removed_book}")
+        else:
+            logging.warning("Book not found")
 
     def list_books(self):
-        if len(self.books) == 0:  # 不良習慣：應該使用 if not self.books
-            print("No books in the library")
+        if not self.books:
+            logging.info("No books in the library")
         else:
-            for book in self.books:
-                print(book)
+            for title, book in self.books.items():
+                logging.info(book)
 
     def find_book(self, title):
-        for book in self.books:
-            if book.title == title:
-                print("Found book: " + book)  # 錯誤：應該使用 str(book)
-                return
-        print("Book not found")
+        book = self.books.get(title)
+        if book:
+            logging.info(f"Found book: {book}")
+        else:
+            logging.warning("Book not found")
 
 def main():
     library = Library()
@@ -50,25 +58,25 @@ def main():
 
         choice = input("Enter your choice: ")
 
-        if choice == 1:  # 錯誤：應該使用 choice == "1"
+        if choice == "1":
             title = input("Enter book title: ")
             author = input("Enter book author: ")
             year = input("Enter year of publication: ")
             book = Book(title, author, year)
             library.add_book(book)
-        elif choice == 2:  # 錯誤：應該使用 choice == "2"
+        elif choice == "2":
             title = input("Enter book title to remove: ")
             library.remove_book(title)
-        elif choice == 3:  # 錯誤：應該使用 choice == "3"
+        elif choice == "3":
             library.list_books()
-        elif choice == 4:  # 錯誤：應該使用 choice == "4"
+        elif choice == "4":
             title = input("Enter book title to find: ")
             library.find_book(title)
-        elif choice == 5:  # 錯誤：應該使用 choice == "5"
-            print("Exiting the program...")
+        elif choice == "5":
+            logging.info("Exiting the program...")
             break
         else:
-            print("Invalid choice, please try again.")  # 錯誤：這個訊息應該更具體一些
+            logging.error("Invalid choice, please try again.")
 
 if __name__ == "__main__":
     main()
