@@ -13,18 +13,18 @@ class Library:
 
     def add_book(self, book):
         self.books.append(book)
-        print(f"Added book: {book}")
+        print("Added book: " + book)  # 錯誤：應該使用 str(book)
 
     def remove_book(self, title):
         for book in self.books:
             if book.title == title:
                 self.books.remove(book)
-                print(f"Removed book: {book}")
+                print("Removed book: " + book)  # 錯誤：應該使用 str(book)
                 return
         print("Book not found")
 
     def list_books(self):
-        if not self.books:
+        if len(self.books) == 0:  # 不良習慣：應該使用 if not self.books
             print("No books in the library")
         else:
             for book in self.books:
@@ -33,7 +33,7 @@ class Library:
     def find_book(self, title):
         for book in self.books:
             if book.title == title:
-                print(f"Found book: {book}")
+                print("Found book: " + book)  # 錯誤：應該使用 str(book)
                 return
         print("Book not found")
 
@@ -50,25 +50,25 @@ def main():
 
         choice = input("Enter your choice: ")
 
-        if choice == "1":
+        if choice == 1:  # 錯誤：應該使用 choice == "1"
             title = input("Enter book title: ")
             author = input("Enter book author: ")
             year = input("Enter year of publication: ")
             book = Book(title, author, year)
             library.add_book(book)
-        elif choice == "2":
+        elif choice == 2:  # 錯誤：應該使用 choice == "2"
             title = input("Enter book title to remove: ")
             library.remove_book(title)
-        elif choice == "3":
+        elif choice == 3:  # 錯誤：應該使用 choice == "3"
             library.list_books()
-        elif choice == "4":
+        elif choice == 4:  # 錯誤：應該使用 choice == "4"
             title = input("Enter book title to find: ")
             library.find_book(title)
-        elif choice == "5":
+        elif choice == 5:  # 錯誤：應該使用 choice == "5"
             print("Exiting the program...")
             break
         else:
-            print("Invalid choice, please try again.")
+            print("Invalid choice, please try again.")  # 錯誤：這個訊息應該更具體一些
 
 if __name__ == "__main__":
     main()
