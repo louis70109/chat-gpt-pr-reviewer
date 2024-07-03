@@ -8,7 +8,7 @@ class Book:
         self.title = title
         self.author = author
         self.year = year
-        self.added_date = datetime.datetime.now()
+        self.added_date = datetime.datetime.now()  # 問題1: 未使用的屬性
 
     def __str__(self):
         return f"{self.title} by {self.author} ({self.year})"
@@ -19,7 +19,7 @@ class Library:
 
     def add_book(self, book):
         if isinstance(book, Book):
-            self.books[book.title] = book
+            self.books[book.title] = book  # 問題2: 書名作為鍵可能導致重複
             logging.info(f"Added book: {book}")
         else:
             logging.error("Invalid book object")
@@ -29,7 +29,7 @@ class Library:
             removed_book = self.books.pop(title)
             logging.info(f"Removed book: {removed_book}")
         else:
-            logging.warning("Book not found")
+            logging.warning("Book not found")  # 問題3: 應該使用 logging.info 而不是 logging.warning
 
     def list_books(self):
         if not self.books:
@@ -43,7 +43,7 @@ class Library:
         if book:
             logging.info(f"Found book: {book}")
         else:
-            logging.warning("Book not found")
+            logging.warning("Book not found")  # 問題4: 應該使用 logging.info 而不是 logging.warning
 
 def main():
     library = Library()
@@ -62,6 +62,11 @@ def main():
             title = input("Enter book title: ")
             author = input("Enter book author: ")
             year = input("Enter year of publication: ")
+            try:
+                year = int(year)  # 問題5: 應該有更多的輸入驗證
+            except ValueError:
+                logging.error("Year must be a number")
+                continue
             book = Book(title, author, year)
             library.add_book(book)
         elif choice == "2":
@@ -76,7 +81,7 @@ def main():
             logging.info("Exiting the program...")
             break
         else:
-            logging.error("Invalid choice, please try again.")
+            logging.error("Invalid choice, please try again.")  # 問題6: 應該使用 logging.warning 而不是 logging.error
 
 if __name__ == "__main__":
     main()
