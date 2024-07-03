@@ -1,41 +1,49 @@
+import datetime
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
 class Book:
     def __init__(self, title, author, year):
         self.title = title
         self.author = author
         self.year = year
+        self.added_date = datetime.datetime.now()
 
     def __str__(self):
         return f"{self.title} by {self.author} ({self.year})"
 
 class Library:
     def __init__(self):
-        self.books = []
+        self.books = {}
 
     def add_book(self, book):
-        self.books.append(book)
-        print(f"Added book: {book}")
+        if isinstance(book, Book):
+            self.books[book.title] = book
+            logging.info(f"Added book: {book}")
+        else:
+            logging.error("Invalid book object")
 
     def remove_book(self, title):
-        for book in self.books:
-            if book.title == title:
-                self.books.remove(book)
-                print(f"Removed book: {book}")
-                return
-        print("Book not found")
+        if title in self.books:
+            removed_book = self.books.pop(title)
+            logging.info(f"Removed book: {removed_book}")
+        else:
+            logging.warning("Book not found")
 
     def list_books(self):
         if not self.books:
-            print("No books in the library")
+            logging.info("No books in the library")
         else:
-            for book in self.books:
-                print(book)
+            for title, book in self.books.items():
+                logging.info(book)
 
     def find_book(self, title):
-        for book in self.books:
-            if book.title == title:
-                print(f"Found book: {book}")
-                return
-        print("Book not found")
+        book = self.books.get(title)
+        if book:
+            logging.info(f"Found book: {book}")
+        else:
+            logging.warning("Book not found")
 
 def main():
     library = Library()
@@ -65,10 +73,10 @@ def main():
             title = input("Enter book title to find: ")
             library.find_book(title)
         elif choice == "5":
-            print("Exiting the program...")
+            logging.info("Exiting the program...")
             break
         else:
-            print("Invalid choice, please try again.")
+            logging.error("Invalid choice, please try again.")
 
 if __name__ == "__main__":
     main()
