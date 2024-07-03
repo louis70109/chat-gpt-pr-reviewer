@@ -5,8 +5,7 @@
 name: Pull Request ChatGPT review
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  pull_request
 
 jobs:
   ai_pr_reviewer:
