@@ -10,8 +10,9 @@ class AiBot(ABC):
     __no_response = "No critical issues found"
     __problems="errors, issues, potential crashes or unhandled exceptions"
     __chat_gpt_ask_long="""
+You are a staff software engineer, you need to code review with following code.
 Could you describe briefly {problems} for the next code with given git diffs? 
-Please, also, do not add intro words, just print errors in the format: "line_number : cause effect"
+Please, also, do not add intro words, just print errors in the format: "[AI]line_number : cause effect"
 If there are no {problems} just say "{no_response}".
 
 DIFFS:
