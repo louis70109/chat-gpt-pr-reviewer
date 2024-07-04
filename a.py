@@ -1,77 +1,78 @@
 import datetime
 import logging
-
+import requests
+import flask,re
 logging.basicConfig(level=logging.INFO)
 
-class Book:
-    def __init__(self, title, author, year):
-        self.title = title
-        self.author = author
-        self.year = year
-        self.added_date = datetime.datetime.now()
+class Task():
+    def __init__(self, name, description, due_date):
+        self.name = name
+        self.description = description
+        self.due_date = due_date
+        self.created_date = datetime.datetime.now()
 
     def __str__(self):
-        return f"{self.title} by {self.author} ({self.year})"
+        return f"Task: {self.name}, Description: {self.description}, Due Date: {self.due_date}"
 
-class Library:
+class TaskManager:
     def __init__(self):
-        self.books = {}
+        self.tasks = {}
 
-    def add_book(self, book):
-        if isinstance(book, Book):
-            self.books[book.title] = book
-            logging.info(f"Added book: {book}")
+    def add_task(self, task):
+        if isinstance(task, Task):
+            self.tasks[task.name] = task
+            logging.info(f"Added task: {task}")
         else:
-            logging.error("Invalid book object")
+            logging.error("Invalid task object")
 
-    def remove_book(self, title):
-        if title in self.books:
-            removed_book = self.books.pop(title)
-            logging.info(f"Removed book: {removed_book}")
+    def remove_task(self, name):
+        if name in self.tasks:
+            removed_task = self.tasks.pop(name)
+            logging.info(f"Removed task: {removed_task}")
         else:
-            logging.warning("Book not found")
+            logging.warning("Task not found")
 
-    def list_books(self):
-        if not self.books:
-            logging.info("No books in the library")
+    def list_tasks(self):
+        if not self.tasks:
+            logging.info("No tasks available")
         else:
-            for title, book in self.books.items():
-                logging.info(book)
+            for name, task in self.tasks.items():
+                logging.info(task)
 
-    def find_book(self, title):
-        book = self.books.get(title)
-        if book:
-            logging.info(f"Found book: {book}")
+    def find_task(self, name):
+        task = self.tasks.get(name)
+        if task:
+            logging.info(f"Found task: {task}")
         else:
-            logging.warning("Book not found")
+            logging.warning("Task not found")
 
 def main():
-    library = Library()
+    task_manager = TaskManager()
 
     while True:
-        print("\nLibrary Menu:")
-        print("1. Add book")
-        print("2. Remove book")
-        print("3. List books")
-        print("4. Find book")
+        print("\nTask Manager Menu:")
+        print("1. Add task")
+        print("2. Remove task")
+        print("3. List tasks")
+        print("4. Find task")
         print("5. Exit")
 
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            title = input("Enter book title: ")
-            author = input("Enter book author: ")
-            year = input("Enter year of publication: ")
-            book = Book(title, author, year)
-            library.add_book(book)
+            name = input("Enter task name: ")
+            description = input("Enter task description: ")
+            due_date = input("Enter due date (YYYY-MM-DD): ")
+            task = Task(name, description, due_date)
+            task_manager.add_task(task)
         elif choice == "2":
-            title = input("Enter book title to remove: ")
-            library.remove_book(title)
+            name = input("Enter task name to remove: ")
+            task_manager.remove_task(name)
         elif choice == "3":
-            library.list_books()
+            task_manager.list_tasks()
         elif choice == "4":
-            title = input("Enter book title to find: ")
-            library.find_book(title)
+            name = input("Enter task name to find: ")
+            task_manager.find_task(name)
         elif choice == "5":
             logging.info("Exiting the program...")
             break
